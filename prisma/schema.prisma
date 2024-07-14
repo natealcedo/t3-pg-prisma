@@ -14,14 +14,27 @@ datasource db {
 model Post {
   id        String   @id @default(cuid())
   name      String
+  content   String   @default("")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
   author    User   @relation(fields: [createdBy], references: [id])
   createdBy String @map("created_by")
 
-  @@index([name])
   @@map("posts")
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  name      String
+  content   String   @default("")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  author    User   @relation(fields: [createdBy], references: [id])
+  createdBy String @map("created_by")
+
+  @@map("comments")
 }
 
 // Necessary for Next auth
@@ -64,6 +77,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   posts         Post[]
+  Comment       Comment[]
 
   @@map("users")
 }
