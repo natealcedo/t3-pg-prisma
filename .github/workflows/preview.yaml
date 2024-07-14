@@ -1,0 +1,38 @@
+name: Deploy Preview
+
+on:
+  create:
+    branches-ignore:
+      - main  # This correctly excludes the 'main' branch
+
+env:
+  VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+
+jobs:
+  db-migrate:
+    permissions: write-all
+    runs-on: ubuntu-latest
+    steps:
+       - name: Check out repository
+         uses: actions/checkout@v4
+
+       - name: Set up Node.js
+         uses: actions/setup-node@v4
+         with:
+          node-version: '20'
+
+       - name: Install pnpm
+         run: npm install -g pnpm
+
+       - name: Install Vercel CLI
+         run: pnpm install --global vercel@latest
+
+       - name: Install dependencies
+         run: pnpm install
+
+       - name: Pull Vercel Environment Information
+         run: vercel env pull .env --environment=preview --token=\${{ env.VERCEL_TOKEN }}
+
+       - name: Run Migrations
+         run: pnpm db:migrate
+
