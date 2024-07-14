@@ -27,13 +27,13 @@ export function LogoutButton(props: LogoutButtonProps) {
         </Avatar>
       </PopoverTrigger>
       <PopoverContent className="p-4">
-        <Button
-          onClick={async () => {
+        <form
+          action={async () => {
             await signOut();
           }}
         >
-          Logout
-        </Button>
+          <Button>Logout</Button>
+        </form>
       </PopoverContent>
     </Popover>
   );
